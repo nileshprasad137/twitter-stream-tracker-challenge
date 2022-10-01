@@ -31,6 +31,7 @@ def main():
     write_messages_to_tsv(
         twitter_stream_tracker.author_message_map, twitter_stream_tracker.authors
     )
+    print("file is written, refer output.tsv")
 
 
 if __name__ == "__main__":
