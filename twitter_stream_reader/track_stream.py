@@ -44,15 +44,17 @@ class Stream:
                             print("Stream connected")
                             for line in resp.iter_lines():
                                 if line:
+                                    time_lapsed = int(time.time())-current_epoch_ts
+                                    print("data received, time lapsed since connection openend :: ", time_lapsed)
+                                    # we need to collect 100 messages or for 30 seconds whichever happens first
+                                    if not self.running or len(self.messages) >= 100 or time_lapsed >= 30:
+                                        self.running = False
+                                        print("Time lapsed is > 30, so main thread hgas already stopped executing and data received just now is not appended in file.")
+                                        print(f"For reference, this is the message_id received after 30seconds: {json.loads(line)['id_str']}")
+                                        return
                                     self._handle_line_data(line)
                                 else:
                                     print("Problem in getting line data")
-                                time_lapsed = int(time.time())-current_epoch_ts
-                                print("time lapsed since connection openend :: ", time_lapsed)
-                                # we need to collect 100 messages or for 30 seconds whichever happens first
-                                if not self.running or len(self.messages) >= 100 or time_lapsed >= 30:
-                                    self.running = False
-                                    return
                             if resp.raw.closed:
                                 print("Stream connection closed by Twitter")
                         else:
