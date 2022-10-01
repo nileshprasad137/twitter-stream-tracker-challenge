@@ -1,6 +1,11 @@
 import csv
 
 def write_messages_to_tsv(author_message_map, authors):
+    """
+    Messages should be grouped by user (users sorted chronologically, ascending).
+    The messages per user should also be sorted chronologically, ascending.
+    Print this information to a tab-separated file, with a header containing the column names.
+    """
     authors.sort(key=lambda author: author.creation_timestamp)
     with open('output.tsv', 'w') as creating_new_csv_file:
         pass
