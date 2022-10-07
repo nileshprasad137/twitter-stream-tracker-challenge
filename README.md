@@ -36,3 +36,11 @@ Write code that will cover the functionality listed below:
   the OAuth process (get temporary token, retrieve access URL, authorise application,
   enter PIN for authenticated token). You can find more information on how-to do that
   [here](https://developer.twitter.com/en/docs/authentication/oauth-1-0a).
+
+## Solution Notes / Learnings:
+- First part of the challenge was to understand OAuth1. OAuth1 is complex and I had to spend some time to understand how OAuth1 works and how pin-based OAuth works in twitter authentication (See [this](https://developer.twitter.com/en/docs/authentication/oauth-1-0a/pin-based-oauth))
+- Next part of the challenge was to connect to a streaming API. Connecting to twitter stream API is conceptually, downloading an infinitely long file over HTTP. See [this](https://developer.twitter.com/en/docs/twitter-api/v1/tweets/filter-realtime/guides/connecting) for understanding how this works. Since, I  was not allowed to use off the shelf libraries, I spent some time understanding these twitter docs. You can make a long HTTP call in Python using `requests` module (use `stream=True`) [see this](https://requests.readthedocs.io/en/latest/user/advanced/#body-content-workflow). You can read [Tweepy](https://www.tweepy.org/) library to understand how this will be performed in best way possible.
+- Another and most interesting part of the challenge was to listen to twitter stream for specific amount of time AND only upto certain number of results. Doing a long HTTP Call using requests module is a blocking IO call and so I had to ensure this has to be done in a separate daemon thread which will get killed after 30s max. If there are > 100 results for tracking a keyword, stream gets shut down gracefully.
+
+
+
